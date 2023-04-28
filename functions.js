@@ -37,10 +37,10 @@ const overwritenote=async (filename,note)=>{
         {
             fs.mkdirSync(path.join(__dirname,'notes'));
         }
-        else{ 
-            if(!fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
+        { 
+            if(fs.existsSync(path.join(__dirname,'notes',`${filename}.txt`)))
             {
-                fs.writeFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`),toaddtxt);
+                fs.writeFileSync(path.join(__dirname,'notes',`${filename}.txt`),toaddtxt);
                 console.log('Note overwritten');
             }
             else{
@@ -73,6 +73,7 @@ const appendnote=async (filename,note)=>{
 }
 
 const deletenote=async (filename)=>{
+    const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
     {
         try{
@@ -89,6 +90,7 @@ const deletenote=async (filename)=>{
  
 }
 const readnote=async (filename)=>{
+    const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
     {    try{
             const rs=fs.readFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`), 'utf-8');
@@ -103,7 +105,7 @@ const readnote=async (filename)=>{
     }
 }
 const rename=async (filename,newfilename)=>{
-    console.log(path.join(__dirname,'notes',`${filename||dateTime}.txt`));
+    const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
     {
         try{

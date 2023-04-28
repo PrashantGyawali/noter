@@ -42,7 +42,9 @@ const readline = require('readline').createInterface({
 
 function checkcmd(){
     readline.question('Notes app:  ', text => {
+
         const arr=text.split(' ');
+
         const [cmd,filename,...temp]=arr;
         const note=temp.join(" ");
         
