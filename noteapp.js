@@ -1,4 +1,5 @@
 const {createnote,appendnote,deletenote, overwritenote,readnote,rename} = require('./functions.js');
+const separate =require("./separator.js")
 const EventEmitter =require('events');
 
 class Emmiter extends EventEmitter{};
@@ -43,11 +44,11 @@ const readline = require('readline').createInterface({
 function checkcmd(){
     readline.question('Notes app:  ', text => {
 
-        const arr=text.split(' ');
+        const arr=separate(text);
+        console.log(arr);
 
-        const [cmd,filename,...temp]=arr;
-        const note=temp.join(" ");
-        
+        const {first:cmd,second1:filename,second2:note}=arr;
+        console.log(cmd,filename,note)
 
         if(text=='close'||text=='exit')
             {
