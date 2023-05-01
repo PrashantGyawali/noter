@@ -44,22 +44,29 @@ const readline = require('readline').createInterface({
 function checkcmd(){
     readline.question('Notes app:  ', text => {
 
-        const arr=separate(text);
-        console.log(arr);
+        let extracmds1=['info','help','tutorial'], extracmds2=['close','exit','quit'];
+        let extracmds=extracmds1.concat(extracmds2);
 
-        const {first:cmd,second1:filename,second2:note}=arr;
-        console.log(cmd,filename,note)
+        if(!extracmds.includes(text.trim()))
+        {   const obj=separate(text);
+            const {first:cmd,second1:filename,second2:note}=obj;
+            notesemittor.emit(cmd,filename,note);
+        }
 
-        if(text=='close'||text=='exit')
+        if(extracmds2.includes(text.trim()))
             {
                 readline.close();
                 process.exit(0);
             }
-        if(text=='info'||text=='help')
+        if(extracmds1.includes(text.trim()))
         {
             commandsinfo.forEach((e)=>{console.log(e);}) 
         }
-        notesemittor.emit(cmd,filename,note);
+
+
+
+
+
         setTimeout(()=>{ checkcmd();},0);
 
 
