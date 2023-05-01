@@ -1,4 +1,5 @@
 const {format}=require('date-fns');
+
 const fs=require('fs');
 
 const path=require('path');
@@ -86,9 +87,10 @@ const deletenote=async (filename)=>{
     }
     else{
         console.log('!!! [File does not exist] !!!')
-    }
- 
+    } 
 }
+
+
 const readnote=async (filename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
@@ -119,4 +121,30 @@ const rename=async (filename,newfilename)=>{
         console.log("!!! [File does not exist] !!!")
     }
 }
-module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename};
+
+const deleteall= (z,a)=>{
+
+    z.question('!![ Are you sure? ]!!:  ', 
+    text => {
+        const yessy=['y','Y','yes','Yes','YES','yEs','1'];
+
+        if(yessy.includes(text))
+        {
+            fs.rmSync(path.join(__dirname,'notes'),{recursive:true,force:true}); 
+            console.log('Deleted all notes');
+
+            a();
+        }
+        else{
+            console.log('Not deleted');
+            a(); 
+        }
+    }
+    )
+
+
+
+ 
+}
+
+module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall};

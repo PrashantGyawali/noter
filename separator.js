@@ -1,8 +1,8 @@
 function separate(text)
 {
-const a=text
+const a=text;
 let t=a.trim();
-const first=t.slice(0,t.indexOf(' '));
+const first=text.includes(' ')?t.slice(0,t.indexOf(' ')):t.slice(0,t.length);
 let second=t.slice(t.indexOf(' '),t.length).trim();
 
 let second1,second2;
@@ -29,9 +29,11 @@ if(second.includes(`"`) && second.includes(`'`))
 }
 }
 if(!second.includes(`"`) && !second.includes(`'`)){
+
     const arr=second.split(' ');
-    // console.log('case 4');
+    // console.log('case 4';
     [second1,...temp]=arr;
+
     second2=temp.join(" ");
 }
 // console.log(`first:${first}\nsecond:${second}\nSecond1:${second1}\nSecond2:${second2}`);
