@@ -1,10 +1,16 @@
-const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall} = require('./functions.js');
-const separate =require("./separator.js")
-const EventEmitter =require('events');
+const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias} = require('./functions.js');
+const separate =require("./separator.js");
+const aliasUpdate=require('./aliasUpdate');
 
+const EventEmitter =require('events');
 class Emmiter extends EventEmitter{};
 const notesemittor =new Emmiter();
 
+let aliases=aliasUpdate();
+
+
+
+//Basic Commands always same
 const commands=
 {
 'create':(filename,text)=>{return createnote(filename,text)},
@@ -13,27 +19,46 @@ const commands=
 'overwrite':(filename,text)=>overwritenote(filename,text),
 'read':(filename)=>readnote(filename),
 'rename':(filename,newfilename)=>rename(filename,newfilename),
-'deleteall':(x,y,z,a)=>{deleteall(z,a);}
+'deleteall':(x,y,z,a)=>{deleteall(z,a)},
+'create-alias': (cmdname,alias)=>{return createAlias(cmdname,alias)},
+'delete-alias': (cmdname,alias)=>{return deleteAlias(cmdname,alias)}
 };
+let commandsarr = Object.keys(commands);
+
+
+//Any change done will be on newcommands
 const newcommands={...commands}
 
-//another name for the basic commands
-let aliases={
-    'create':['newnote','new-note','form'],
-    'append':['addto','addmore'],
-    'delete':['rm','remove'],
-    'overwrite':['rewrite'],
-    'read':['display','open'],
-    'rename':['rn','change-name'],
-    'deleteall':['delete-all']
-}
 
-//adding the aliases to original commands object
-for(let command of Object.keys(newcommands))
+
+
+
+//another name for the basic commands: alias
+function setUpAlias()
 {
-    aliases[`${command}`].forEach((e)=>{newcommands[`${e}`]=commands[command]})
+        notesemittor.removeAllListeners();
+
+        //updating the new alias
+        aliases=aliasUpdate();
+
+        //adding the aliases to original commands object
+        for(let command of Object.keys(newcommands))
+        {
+            aliases[`${command}`]?.forEach((e)=>{newcommands[`${e}`]=commands[command]})
+        }
+
+        let newcommandsarr=Object.keys(newcommands);
+
+        
+        //setting up the emitters
+        newcommandsarr.forEach((command) =>
+        notesemittor.on(command,newcommands[command])
+        );
 }
 
+
+
+setUpAlias();
 //commands info
 const commandsinfo=
 ['\n\t!! [INFO] !!\t\n',
@@ -46,17 +71,15 @@ const commandsinfo=
 ];
 
 
+
+
+
+
+
+
 //welcome screen
-let commandsarr = Object.keys(commands);
-let newcommandsarr=Object.keys(newcommands);
 console.log("\n\tWelcome to Simple Note app\n\t   Here are the functions");
 console.log([...commandsarr,'info']);
-
-//setting up the emitters
-newcommandsarr.forEach((command) =>
-notesemittor.on(command,newcommands[command])
-);
-
     
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -72,8 +95,9 @@ function checkcmd(){
         if(!extracmds.includes(text.trim()))
         {   const obj=separate(text);
             const {first:cmd,second1:filename,second2:note}=obj;
-            // console.log('command:',cmd)
+            console.log('command:',cmd)
             notesemittor.emit(cmd,filename,note,readline,checkcmd);
+            setUpAlias();
         }
 
         if(quitcmd.includes(text.trim()))
@@ -89,6 +113,7 @@ function checkcmd(){
         {
             console.log(aliases);
         }
+
         setTimeout(()=>{ checkcmd();},0);
       }
       );     

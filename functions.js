@@ -1,8 +1,8 @@
 const {format}=require('date-fns');
-
-const fs=require('fs');
-
 const path=require('path');
+const fs=require('fs');
+let aliasestmp=fs.readFileSync(path.join(__dirname,'config','aliases'))
+let aliases=JSON.parse(aliasestmp);
 
 const createnote=async (filename,note)=>{
     try{
@@ -141,10 +141,32 @@ const deleteall= (z,a)=>{
         }
     }
     )
-
-
-
- 
 }
 
-module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall};
+
+const createAlias=async (cmdname,alias)=>{
+
+            console.log(cmdname,alias)
+            let newAliases={...aliases};
+            newAliases[cmdname].push(alias)
+            fs.writeFileSync(path.join(__dirname,'config','aliases'),JSON.stringify(newAliases));
+            console.log(`Alias '${alias}' created for "${cmdname}" `); 
+}
+
+
+const deleteAlias=async (cmdname,alias)=>{
+    let newAliases={...aliases};
+    let tmp=newAliases[`${cmdname}`].filter((e)=>e!==alias);
+
+    newAliases[`${cmdname}`]=tmp;
+
+    fs.writeFileSync(path.join(__dirname,'config','aliases'),JSON.stringify(newAliases));
+    console.log(`Alias '${alias}' deleted for "${cmdname}" `); 
+}
+
+
+
+
+
+
+module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias};
