@@ -17,11 +17,15 @@ A simple terminal note app i made to learn file system and node js
     - Syntax: ``read [filename]``
 * **rename**: Renames an existing file to newone
     - Syntax: ``rename [filename] [newfilename]``
-
+* **create-alias**: Creates an alias to a command
+- Syntax: `` create-alias [basecommandname] [alias]``
+* **delete-alias**: Deletes an alias to a command
+    - Syntax: `` selete-alias [basecommandname] [alias]``
 
 ## Todo:
 - list all notes
 - delete all command :heavy_check_mark:
+- command alias :heavy_check_mark:
 - edit command (different from overwrite or append)
 - colorize the commands
 - groups

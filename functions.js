@@ -90,7 +90,6 @@ const deletenote=async (filename)=>{
     } 
 }
 
-
 const readnote=async (filename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
@@ -106,6 +105,7 @@ const readnote=async (filename)=>{
         console.log('!!! [Note does not exist] !!!');
     }
 }
+
 const rename=async (filename,newfilename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
     if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
@@ -144,25 +144,29 @@ const deleteall= (z,a)=>{
 }
 
 
-const createAlias=async (cmdname,alias)=>{
+const createAlias = async (cmdname, alias) => 
+{
+  let newAliases = { ...aliases };
+  newAliases[cmdname].push(alias);
+  fs.writeFileSync(
+    path.join(__dirname, "config", "aliases"),
+    JSON.stringify(newAliases)
+  );
+  console.log(`Alias '${alias}' created for "${cmdname}" `);
+};
 
-            console.log(cmdname,alias)
-            let newAliases={...aliases};
-            newAliases[cmdname].push(alias)
-            fs.writeFileSync(path.join(__dirname,'config','aliases'),JSON.stringify(newAliases));
-            console.log(`Alias '${alias}' created for "${cmdname}" `); 
-}
+const deleteAlias = async (cmdname, alias) => {
+  let newAliases = { ...aliases };
+  let tmp = newAliases[`${cmdname}`].filter((e) => e !== alias);
 
+  newAliases[`${cmdname}`] = tmp;
 
-const deleteAlias=async (cmdname,alias)=>{
-    let newAliases={...aliases};
-    let tmp=newAliases[`${cmdname}`].filter((e)=>e!==alias);
-
-    newAliases[`${cmdname}`]=tmp;
-
-    fs.writeFileSync(path.join(__dirname,'config','aliases'),JSON.stringify(newAliases));
-    console.log(`Alias '${alias}' deleted for "${cmdname}" `); 
-}
+  fs.writeFileSync(
+    path.join(__dirname, "config", "aliases"),
+    JSON.stringify(newAliases)
+  );
+  console.log(`Alias '${alias}' deleted for "${cmdname}" `);
+};
 
 
 

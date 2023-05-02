@@ -49,7 +49,7 @@ function setUpAlias()
 
         let newcommandsarr=Object.keys(newcommands);
 
-        
+
         //setting up the emitters
         newcommandsarr.forEach((command) =>
         notesemittor.on(command,newcommands[command])
@@ -59,6 +59,7 @@ function setUpAlias()
 
 
 setUpAlias();
+
 //commands info
 const commandsinfo=
 ['\n\t!! [INFO] !!\t\n',
@@ -67,7 +68,9 @@ const commandsinfo=
 'delete: Deletes a note\nSyntax: delete filename \n',
 'overwrite: Overwrites an existing note\nSyntax: create filename text\n',
 'read: Reads a note\nSyntax: read filename\n',
-'rename: Renames an existing file to newone\nSyntax: rename filename newfilename\n'
+'rename: Renames an existing file to newone\nSyntax: rename filename newfilename\n',
+'create-alias: Creates an alias to a command\nSyntax: create-alias basecommandname alias\n',
+'delete-alias: Deletes an alias to a command\nSyntax: delete-alias basecommandname alias\n'
 ];
 
 
