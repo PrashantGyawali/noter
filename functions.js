@@ -122,9 +122,9 @@ const rename=async (filename,newfilename)=>{
     }
 }
 
-const deleteall= (z,a)=>{
+const deleteall= (readline,a)=>{
 
-    z.question('!![ Are you sure? ]!!:  ', 
+    readline.question('!![ Are you sure?(y/n) ]!!:  ', 
     text => {
         const yessy=['y','Y','yes','Yes','YES','yEs','1'];
 
@@ -170,7 +170,22 @@ const deleteAlias = async (cmdname, alias) => {
 
 
 
+const edit= (filename,readline,fn)=>{
+
+    let rs;
+    if(fs.existsSync(path.join(__dirname,'notes',`${filename}.txt`)))
+    {    try{
+            rs=fs.readFileSync(path.join(__dirname,'notes',`${filename}.txt`), 'utf-8');
+            }
+        catch(err){console.log(err)}
+    }
+    else{
+        console.log('! File not found !')
+    }
+    console.log(`\nNote: ${filename} ${rs}`);
+    fn(`overwrite ${filename} `)
+}
 
 
 
-module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias};
+module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit};

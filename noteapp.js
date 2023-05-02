@@ -1,4 +1,4 @@
-const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias} = require('./functions.js');
+const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit} = require('./functions.js');
 const separate =require("./separator.js");
 const aliasUpdate=require('./aliasUpdate');
 
@@ -21,7 +21,8 @@ const commands=
 'rename':(filename,newfilename)=>rename(filename,newfilename),
 'deleteall':(x,y,z,a)=>{deleteall(z,a)},
 'create-alias': (cmdname,alias)=>{return createAlias(cmdname,alias)},
-'delete-alias': (cmdname,alias)=>{return deleteAlias(cmdname,alias)}
+'delete-alias': (cmdname,alias)=>{return deleteAlias(cmdname,alias)},
+'edit':(filename,y,readline,fn)=>{return edit(filename,readline,fn)},
 };
 let commandsarr = Object.keys(commands);
 
@@ -84,43 +85,55 @@ const commandsinfo=
 console.log("\n\tWelcome to Simple Note app\n\t   Here are the functions");
 console.log([...commandsarr,'info']);
     
+
 const readline = require('readline').createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
+
   });
 
-function checkcmd(){
-    readline.question('Notes app:  ', text => {
+function checkcmd(y) 
+{
 
-        let infocmd=['info','help','tutorial'], quitcmd=['close','exit','quit','terminate','end'];
-        let extracmds=infocmd.concat(quitcmd);
+  setTimeout(() => {
+    if (y) {
+      readline.write(y);
+    }
+  }, 10);
 
-        if(!extracmds.includes(text.trim()))
-        {   const obj=separate(text);
-            const {first:cmd,second1:filename,second2:note}=obj;
-            console.log('command:',cmd)
-            notesemittor.emit(cmd,filename,note,readline,checkcmd);
-            setUpAlias();
-        }
+  readline.question("Notes app:  ", (text) => {
+    let infocmd = ["info", "help", "tutorial"],
+      quitcmd = ["close", "exit", "quit", "terminate", "end"];
+    let extracmds = infocmd.concat(quitcmd);
 
-        if(quitcmd.includes(text.trim()))
-            {
-                readline.close();
-                process.exit(0);
-            }
-        if(infocmd.includes(text.trim()))
-        {
-            commandsinfo.forEach((e)=>{console.log(e);}) 
-        }
-        if(text.trim()=='alias'||text.trim()=='aliases')
-        {
-            console.log(aliases);
-        }
+    let tmp;
+    if (!extracmds.includes(text.trim())) {
+      const obj = separate(text);
+      const { first: cmd, second1: filename, second2: note } = obj;
+      // console.log('command:',cmd)
+      notesemittor.emit(cmd, filename, note, readline, checkcmd);
+      setUpAlias();
+      tmp = cmd;
+    }
 
-        setTimeout(()=>{ checkcmd();},0);
-      }
-      );     
-  }
+    if (quitcmd.includes(text.trim())) {
+      readline.close();
+      process.exit(0);
+    }
+    if (infocmd.includes(text.trim())) {
+      commandsinfo.forEach((e) => {
+        console.log(e);
+      });
+    }
+    if (text.trim() == "alias" || text.trim() == "aliases") {
+      console.log(aliases);
+    }
+
+    setTimeout(() => {
+      checkcmd();
+    }, 0);
+  });
+}
 
 checkcmd();
 
