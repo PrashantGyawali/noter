@@ -1,0 +1,1 @@
+{"create":["form","new"],"append":["add"],"delete":["rm","remove","terminate"],"overwrite":["rewrite"],"read":["open","display","show"],"rename":["rn","re-name"],"deleteall":["removeall","delete-all"],"create-alias":["create-aliases","c-a"],"delete-alias":["delete-aliases","d-a"]}
