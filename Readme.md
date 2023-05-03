@@ -2,7 +2,7 @@
 A simple terminal note app i made to learn file system and node js
 
 **How to run?** 
-- run `node noteapp.js`
+- run `node noter`
 
  ### **Commands:** 
 * **create**: Creates a new note
