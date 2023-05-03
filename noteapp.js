@@ -1,4 +1,5 @@
 const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit} = require('./functions.js');
+const color=require('./color')
 const separate =require("./separator.js");
 const aliasUpdate=require('./aliasUpdate');
 
@@ -8,6 +9,16 @@ const notesemittor =new Emmiter();
 
 let aliases=aliasUpdate();
 
+
+//clears the colors on exit of the app
+process.on('exit', function () {
+  console.log('\x1b[0m');
+});
+// catch ctrl+c event and exit normally
+process.on('SIGINT', function () {
+  console.log('\x1b[0m');
+  process.exit(0);
+});
 
 
 //Basic Commands always same
@@ -63,15 +74,15 @@ setUpAlias();
 
 //commands info
 const commandsinfo=
-['\n\t!! [INFO] !!\t\n',
-'create: Creates a new note\nSyntax: create filename text\n',
-'append: Adds to an existing note\nSyntax: append filename text\n',
-'delete: Deletes a note\nSyntax: delete filename \n',
-'overwrite: Overwrites an existing note\nSyntax: create filename text\n',
-'read: Reads a note\nSyntax: read filename\n',
-'rename: Renames an existing file to newone\nSyntax: rename filename newfilename\n',
-'create-alias: Creates an alias to a command\nSyntax: create-alias basecommandname alias\n',
-'delete-alias: Deletes an alias to a command\nSyntax: delete-alias basecommandname alias\n'
+[color.toYellow('\n\t!! [INFO] !!\t\n'),
+color.toLBlue('create:')+' Creates a new note\n'+color.toLBlue('Syntax:')+' create filename text\n',
+color.toLBlue('delete:')+ 'Deletes a note\n'+ color.toLBlue('Syntax:')+' delete filename \n',
+color.toLBlue('append:')+ 'Adds to an existing note\n'+ color.toLBlue('Syntax:')+' append filename text\n',
+color.toLBlue('overwrite:')+ 'Overwrites an existing note\n'+ color.toLBlue('Syntax:')+' create filename text\n',
+color.toLBlue('read:')+ 'Reads a note\n'+ color.toLBlue('Syntax:')+' read filename\n',
+color.toLBlue('rename:')+ 'Renames an existing file to newone\n'+ color.toLBlue('Syntax:')+' rename filename newfilename\n',
+color.toLBlue('create-alias:')+ 'Creates an alias to a command\n'+ color.toLBlue('Syntax:')+' create-alias basecommandname alias\n',
+color.toLBlue('delete-alias:')+ 'Deletes an alias to a command\n'+ color.toLBlue('Syntax:')+' delete-alias basecommandname alias\n'
 ];
 
 
@@ -82,8 +93,8 @@ const commandsinfo=
 
 
 //welcome screen
-console.log("\n\tWelcome to Simple Note app\n\t   Here are the functions");
-console.log([...commandsarr,'info']);
+console.log(color.toYellow("\n\t\tWelcome to Simple Note app\n\t\t   Here are the functions"));
+console.log('[ '+(color.toLBlue([...commandsarr,'info'].join(', ')) +' ]'));
     
 
 const readline = require('readline').createInterface({
@@ -92,49 +103,55 @@ const readline = require('readline').createInterface({
 
   });
 
-function checkcmd(y) 
-{
-
+function checkcmd(y) {
   setTimeout(() => {
     if (y) {
       readline.write(y);
     }
   }, 10);
 
-  readline.question("Notes app:  ", (text) => {
-    let infocmd = ["info", "help", "tutorial"],
-      quitcmd = ["close", "exit", "quit", "terminate", "end"];
-    let extracmds = infocmd.concat(quitcmd);
+  readline.question(
+    "\n\x1b[0m" + color.toGreen("Notes app:  ") + "\x1b[38;5;50m",
+    (text) => {
+      console.log("\x1b[0m");
+      let infocmd = ["info", "help", "tutorial"],
+        quitcmd = ["close", "exit", "quit", "terminate", "end"];
+      let extracmds = infocmd.concat(quitcmd);
 
-    let tmp;
-    if (!extracmds.includes(text.trim())) {
-      const obj = separate(text);
-      const { first: cmd, second1: filename, second2: note } = obj;
-      // console.log('command:',cmd)
-      notesemittor.emit(cmd, filename, note, readline, checkcmd);
-      setUpAlias();
-      tmp = cmd;
-    }
+      let tmp;
 
-    if (quitcmd.includes(text.trim())) {
-      readline.close();
-      process.exit(0);
-    }
-    if (infocmd.includes(text.trim())) {
-      commandsinfo.forEach((e) => {
-        console.log(e);
-      });
-    }
-    if (text.trim() == "alias" || text.trim() == "aliases") {
-      console.log(aliases);
-    }
+      if (!extracmds.includes(text.trim())) {
+        const obj = separate(text);
+        const { first: cmd, second1: filename, second2: note } = obj;
+        // console.log('command:',cmd)
+        notesemittor.emit(cmd, filename, note, readline, checkcmd);
+        setUpAlias();
+        tmp = cmd;
+      }
 
-    setTimeout(() => {
-      checkcmd();
-    }, 0);
-  });
+      if (quitcmd.includes(text.trim())) {
+        console.log("\x1b[0m");
+        readline.close();
+        process.exit(0);
+      }
+      if (infocmd.includes(text.trim())) {
+        commandsinfo.forEach((e) => {
+          console.log(color.toYellow(e));
+        });
+      }
+      if (text.trim() == "alias" || text.trim() == "aliases") {
+        console.log(aliases);
+      }
+
+      setTimeout(() => {
+        checkcmd();
+      }, 0);
+    }
+  );
 }
 
+
+console.log('\n');
 checkcmd();
 
 

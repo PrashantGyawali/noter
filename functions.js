@@ -1,4 +1,5 @@
 const {format}=require('date-fns');
+const color=require('./color')
 const path=require('path');
 const fs=require('fs');
 let aliasestmp=fs.readFileSync(path.join(__dirname,'config','aliases'))
@@ -20,12 +21,12 @@ const createnote=async (filename,note)=>{
         }
 
         else{
-            console.log('file already exists');
+            console.log(color.toRed('file already exists'));
         }
 
     }
     catch(err){
-        console.log(err);
+        console.log(color.toBgRed(err));
     }
     
 }
@@ -42,17 +43,17 @@ const overwritenote=async (filename,note)=>{
             if(fs.existsSync(path.join(__dirname,'notes',`${filename}.txt`)))
             {
                 fs.writeFileSync(path.join(__dirname,'notes',`${filename}.txt`),toaddtxt);
-                console.log('Note overwritten');
+                console.log(color.toLGreen('Note overwritten'));
             }
             else{
-                console.log("!!! [File does not exist] !!!")
+                console.log(color.toBgRed("!!! [File does not exist] !!!"));
             }  
         }
 
 
     }
     catch(err){
-        console.log(err);
+        console.log(color.toBgRed(err));
     }
     
 }
@@ -66,10 +67,10 @@ const appendnote=async (filename,note)=>{
          fs.mkdirSync(path.join(__dirname,'notes'));
         }
         fs.appendFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`),toaddtxt);
-        console.log('Note appended');
+        console.log(color.toLGreen('Note appended'));
     }
     catch(err){
-        console.log(err);
+        console.log(color.toBgRed(err));
     }   
 }
 
@@ -79,14 +80,14 @@ const deletenote=async (filename)=>{
     {
         try{
             fs.rm(path.join(__dirname,'notes',`${filename||dateTime}.txt`),()=>{console.log('Deleted: '+filename)});
-            console.log('Note deleted');
+            console.log(color.toLGreen('Note deleted'));
         }
         catch(err){
-            console.log(err);
+            console.log(color.toBgRed(err));
         }  
     }
     else{
-        console.log('!!! [File does not exist] !!!')
+        console.log(color.toRed('!!! [File does not exist] !!!'));
     } 
 }
 
@@ -98,11 +99,11 @@ const readnote=async (filename)=>{
             console.log(rs)
         }
         catch(err){
-            console.log(err);
+            console.log(color.toBgRed(err));
         }  
     } 
     else{
-        console.log('!!! [Note does not exist] !!!');
+        console.log(color.toRed('!!! [File does not exist] !!!'));
     }
 }
 
@@ -114,11 +115,13 @@ const rename=async (filename,newfilename)=>{
             fs.renameSync(path.join(__dirname,'notes',`${filename}.txt`),path.join(__dirname,'notes',`${newfilename}.txt`));
         console.log('Note renamed');
     }
-        catch(err){console.log(err)}
+        catch(err){
+            console.log(color.toBgRed(err));
+        }
 
     }
     else{
-        console.log("!!! [File does not exist] !!!")
+        console.log(color.toRed('!!! [File does not exist] !!!'));
     }
 }
 
@@ -131,12 +134,12 @@ const deleteall= (readline,a)=>{
         if(yessy.includes(text))
         {
             fs.rmSync(path.join(__dirname,'notes'),{recursive:true,force:true}); 
-            console.log('Deleted all notes');
+            console.log(color.toLGreen('Deleted all notes'));
 
             a();
         }
         else{
-            console.log('Not deleted');
+            console.log(color.toRed('Not deleted'));
             a(); 
         }
     }
@@ -152,7 +155,7 @@ const createAlias = async (cmdname, alias) =>
     path.join(__dirname, "config", "aliases"),
     JSON.stringify(newAliases)
   );
-  console.log(`Alias '${alias}' created for "${cmdname}" `);
+  console.log(color.toLGreen(`Alias '${alias}' created for "${cmdname}" `));
 };
 
 const deleteAlias = async (cmdname, alias) => {
@@ -165,7 +168,7 @@ const deleteAlias = async (cmdname, alias) => {
     path.join(__dirname, "config", "aliases"),
     JSON.stringify(newAliases)
   );
-  console.log(`Alias '${alias}' deleted for "${cmdname}" `);
+  console.log(color.toLGreen(`Alias '${alias}' deleted for "${cmdname}" `));
 };
 
 
@@ -177,10 +180,12 @@ const edit= (filename,readline,fn)=>{
     {    try{
             rs=fs.readFileSync(path.join(__dirname,'notes',`${filename}.txt`), 'utf-8');
             }
-        catch(err){console.log(err)}
+        catch(err){
+            console.log(color.toBgRed(err));
+        }
     }
     else{
-        console.log('! File not found !')
+        console.log(color.toRed('! File not found !'));
     }
     console.log(`\nNote: ${filename} ${rs}`);
     fn(`overwrite ${filename} `)
