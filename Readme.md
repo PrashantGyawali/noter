@@ -29,5 +29,5 @@ A simple terminal note app i made to learn file system and node js
 - delete all command :heavy_check_mark:
 - command alias :heavy_check_mark:
 - edit command ( read + overwrite)  :heavy_check_mark:
-- colorize the commands
-- groups
+- colorize the commands :heavy_check_mark:
+- groups??
