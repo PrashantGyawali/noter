@@ -2,22 +2,22 @@ const {format}=require('date-fns');
 const color=require('./color')
 const path=require('path');
 const fs=require('fs');
-let aliasestmp=fs.readFileSync(path.join(__dirname,'config','aliases'))
+let aliasestmp=fs.readFileSync(path.join(path.dirname(__dirname),'config','aliases'))
 let aliases=JSON.parse(aliasestmp);
 
 const createnote=async (filename,note)=>{
     try{
         const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
         const toaddtxt=`${dateTime}\t\t${note}\n`
-        if(!fs.existsSync(path.join(__dirname,'notes')))
+        if(!fs.existsSync(path.join(path.dirname(__dirname),'notes')))
         {
-            fs.mkdirSync(path.join(__dirname,'notes'));
+            fs.mkdirSync(path.join(path.dirname(__dirname),'notes'));
         }
         
-        if(!fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
+        if(!fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`)))
         {
-            fs.writeFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`),toaddtxt);
-            console.log("Note created... ")
+            fs.writeFileSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`),toaddtxt);
+            console.log(color.toLGreen("Note created... "));
         }
 
         else{
@@ -35,14 +35,14 @@ const overwritenote=async (filename,note)=>{
     try{
         const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
         const toaddtxt=`${dateTime}\t\t${note}\n`
-        if(!fs.existsSync(path.join(__dirname,'notes')))
+        if(!fs.existsSync(path.join(path.dirname(__dirname),'notes')))
         {
-            fs.mkdirSync(path.join(__dirname,'notes'));
+            fs.mkdirSync(path.join(path.dirname(__dirname),'notes'));
         }
         { 
-            if(fs.existsSync(path.join(__dirname,'notes',`${filename}.txt`)))
+            if(fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename}.txt`)))
             {
-                fs.writeFileSync(path.join(__dirname,'notes',`${filename}.txt`),toaddtxt);
+                fs.writeFileSync(path.join(path.dirname(__dirname),'notes',`${filename}.txt`),toaddtxt);
                 console.log(color.toLGreen('Note overwritten'));
             }
             else{
@@ -62,11 +62,11 @@ const appendnote=async (filename,note)=>{
     try{
         const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
         const toaddtxt=`${dateTime}\t\t${note}\n`
-        if(!fs.existsSync(path.join(__dirname,'notes')))
+        if(!fs.existsSync(path.join(path.dirname(__dirname),'notes')))
         {
-         fs.mkdirSync(path.join(__dirname,'notes'));
+         fs.mkdirSync(path.join(path.dirname(__dirname),'notes'));
         }
-        fs.appendFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`),toaddtxt);
+        fs.appendFileSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`),toaddtxt);
         console.log(color.toLGreen('Note appended'));
     }
     catch(err){
@@ -76,10 +76,10 @@ const appendnote=async (filename,note)=>{
 
 const deletenote=async (filename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
-    if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
+    if(fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`)))
     {
         try{
-            fs.rm(path.join(__dirname,'notes',`${filename||dateTime}.txt`),()=>{console.log('Deleted: '+filename)});
+            fs.rm(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`),()=>{console.log('Deleted: '+filename)});
             console.log(color.toLGreen('Note deleted'));
         }
         catch(err){
@@ -93,9 +93,9 @@ const deletenote=async (filename)=>{
 
 const readnote=async (filename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
-    if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
+    if(fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`)))
     {    try{
-            const rs=fs.readFileSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`), 'utf-8');
+            const rs=fs.readFileSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`), 'utf-8');
             console.log(rs)
         }
         catch(err){
@@ -109,10 +109,10 @@ const readnote=async (filename)=>{
 
 const rename=async (filename,newfilename)=>{
     const dateTime=`${format(new Date(),'yyyy-MM-dd HH-mm-ss')}`
-    if(fs.existsSync(path.join(__dirname,'notes',`${filename||dateTime}.txt`)))
+    if(fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename||dateTime}.txt`)))
     {
         try{
-            fs.renameSync(path.join(__dirname,'notes',`${filename}.txt`),path.join(__dirname,'notes',`${newfilename}.txt`));
+            fs.renameSync(path.join(path.dirname(__dirname),'notes',`${filename}.txt`),path.join(path.dirname(__dirname),'notes',`${newfilename}.txt`));
         console.log('Note renamed');
     }
         catch(err){
@@ -133,7 +133,7 @@ const deleteall= (readline,a)=>{
 
         if(yessy.includes(text))
         {
-            fs.rmSync(path.join(__dirname,'notes'),{recursive:true,force:true}); 
+            fs.rmSync(path.join(path.dirname(__dirname),'notes'),{recursive:true,force:true}); 
             console.log(color.toLGreen('Deleted all notes'));
 
             a();
@@ -152,7 +152,7 @@ const createAlias = async (cmdname, alias) =>
   let newAliases = { ...aliases };
   newAliases[cmdname].push(alias);
   fs.writeFileSync(
-    path.join(__dirname, "config", "aliases"),
+    path.join(path.dirname(__dirname), "config", "aliases"),
     JSON.stringify(newAliases)
   );
   console.log(color.toLGreen(`Alias '${alias}' created for "${cmdname}" `));
@@ -165,7 +165,7 @@ const deleteAlias = async (cmdname, alias) => {
   newAliases[`${cmdname}`] = tmp;
 
   fs.writeFileSync(
-    path.join(__dirname, "config", "aliases"),
+    path.join(path.dirname(__dirname), "config", "aliases"),
     JSON.stringify(newAliases)
   );
   console.log(color.toLGreen(`Alias '${alias}' deleted for "${cmdname}" `));
@@ -176,9 +176,9 @@ const deleteAlias = async (cmdname, alias) => {
 const edit= (filename,readline,fn)=>{
 
     let rs;
-    if(fs.existsSync(path.join(__dirname,'notes',`${filename}.txt`)))
+    if(fs.existsSync(path.join(path.dirname(__dirname),'notes',`${filename}.txt`)))
     {    try{
-            rs=fs.readFileSync(path.join(__dirname,'notes',`${filename}.txt`), 'utf-8');
+            rs=fs.readFileSync(path.join(path.dirname(__dirname),'notes',`${filename}.txt`), 'utf-8');
             }
         catch(err){
             console.log(color.toBgRed(err));

@@ -1,4 +1,4 @@
-# Simple Note app
+# Noter
 A simple terminal note app i made to learn file system and node js
 
 **How to run?** 

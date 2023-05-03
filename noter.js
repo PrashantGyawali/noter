@@ -1,7 +1,7 @@
-const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit} = require('./functions.js');
-const color=require('./color')
-const separate =require("./separator.js");
-const aliasUpdate=require('./aliasUpdate');
+const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit} = require('./src/functions.js');
+const color=require('./src/color.js')
+const separate =require("./src/separator.js");
+const aliasUpdate=require('./src/aliasUpdate.js');
 
 const EventEmitter =require('events');
 class Emmiter extends EventEmitter{};
@@ -111,7 +111,7 @@ function checkcmd(y) {
   }, 10);
 
   readline.question(
-    "\n\x1b[0m" + color.toGreen("Notes app:  ") + "\x1b[38;5;50m",
+    "\n\x1b[0m" + color.toGreen("Noter:  ") + "\x1b[38;5;50m",
     (text) => {
       console.log("\x1b[0m");
       let infocmd = ["info", "help", "tutorial"],
