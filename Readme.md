@@ -18,7 +18,7 @@ A simple terminal note app i made to learn file system and node js
 * **rename**: Renames an existing file to newone
     - Syntax: ``rename [notename] [newfilename]``
 * **create-alias**: Creates an alias to a command
-- Syntax: `` create-alias [basecommandname] [alias]``
+    - Syntax: `` create-alias [basecommandname] [alias]``
 * **delete-alias**: Deletes an alias to a command
     - Syntax: `` selete-alias [basecommandname] [alias]``
 * **edit**: Reads a file and allows overwrite
