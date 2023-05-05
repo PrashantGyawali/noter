@@ -1,4 +1,4 @@
-const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit} = require('./src/functions.js');
+const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit,list} = require('./src/functions.js');
 const color=require('./src/color.js')
 const separate =require("./src/separator.js");
 const aliasUpdate=require('./src/aliasUpdate.js');
@@ -34,6 +34,8 @@ const commands=
 'create-alias': (cmdname,alias)=>{return createAlias(cmdname,alias)},
 'delete-alias': (cmdname,alias)=>{return deleteAlias(cmdname,alias)},
 'edit':(filename,y,readline,fn)=>{return edit(filename,readline,fn)},
+'list':()=>{return list()},
+
 };
 let commandsarr = Object.keys(commands);
 

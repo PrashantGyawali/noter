@@ -1,6 +1,7 @@
 const {format}=require('date-fns');
 const color=require('./color')
 const path=require('path');
+const Table=require('cli-table3')
 const fs=require('fs');
 let aliasestmp=fs.readFileSync(path.join(path.dirname(__dirname),'config','aliases'))
 let aliases=JSON.parse(aliasestmp);
@@ -191,6 +192,38 @@ const edit= (filename,readline,fn)=>{
     fn(`overwrite ${filename} `)
 }
 
+const list= ()=>{
+
+    let rs;
+    if(fs.existsSync(path.join(path.dirname(__dirname),'notes')))
+    {    try{
+            const files=fs.readdirSync(path.join(path.dirname(__dirname),'notes'));
+            if(files.length>0)        
+            {      let table=new Table( {"head":['S.N.', 'Note name',"Date modified","Date Created"]})
+                    let sn=1
+                    files.forEach((e)=>{
+                        let {mtime,ctime}=fs.statSync(path.join(path.dirname(__dirname),'notes',e));
+                        table.push([sn,e,mtime.toLocaleString(),ctime.toLocaleString() ]);
+
+                        sn++;
+                        })
+
+                        console.log(table.toString())
+             }
+             else{
+                console.log(color.toRed('! No Notes not found !'))
+             }
+            }
+        catch(err){
+            console.log(color.toBgRed(err));
+        }
+    }
+    else{
+        fs.mkdirSync(path.join(path.dirname(__dirname),'notes'));
+        console.log(color.toRed('! No Notes not found !'))
+    }
+}
 
 
-module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit};
+
+module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit,list};
