@@ -6,13 +6,13 @@ A simple terminal note app i made to learn file system and node js
 
  ### **Commands:** 
 * **create**: Creates a new note
-    - Syntax: ``create [notename] [text]``,
+    - Syntax: ``create [notename] [text]``
 * **append**: Adds to an existing note
-    - Syntax: ``append [notename] [text]``,
+    - Syntax: ``append [notename] [text]``
 * **delete**: Deletes a note
     - Syntax: ``delete [notename]``,
 * **overwrite**: Overwrites an existing note
-    - Syntax: ``create [notename] [text]``,
+    - Syntax: ``create [notename] [text
 * **read**: Reads a note
     - Syntax: ``read [notename]``
 * **rename**: Renames an existing file to newone
@@ -25,7 +25,7 @@ A simple terminal note app i made to learn file system and node js
     - Syntax: `` edit [notename]``
 
 ## Todo:
-- list all notes
+- list all notes :heavy_check_mark:
 - delete all command :heavy_check_mark:
 - command alias :heavy_check_mark:
 - edit command ( read + overwrite)  :heavy_check_mark:
