@@ -147,6 +147,20 @@ const deleteall= (readline,a)=>{
     )
 }
 
+const alias = async (cmdname) => 
+{
+    console.log(cmdname);
+    if(cmdname)
+    {
+        aliases[`${cmdname}`]?console.log(`Aliases of ${cmdname} are: [ ${aliases[cmdname]} ]`): console.log(color.toRed(`! Alias of ${cmdname} not found !`));
+
+    }
+    else{
+      console.log(aliases);
+    }
+};
+
+
 
 const createAlias = async (cmdname, alias) => 
 {
@@ -226,4 +240,4 @@ const list= ()=>{
 
 
 
-module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit,list};
+module.exports={createnote,appendnote,deletenote,overwritenote,readnote,rename,deleteall,alias,createAlias,deleteAlias,edit,list};

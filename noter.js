@@ -1,4 +1,4 @@
-const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,createAlias,deleteAlias,edit,list} = require('./src/functions.js');
+const {createnote,appendnote,deletenote, overwritenote,readnote,rename,deleteall,alias,createAlias,deleteAlias,edit,list} = require('./src/functions.js');
 const color=require('./src/color.js')
 const separate =require("./src/separator.js");
 const aliasUpdate=require('./src/aliasUpdate.js');
@@ -34,6 +34,7 @@ const commands=
 'create-alias': (cmdname,alias)=>{return createAlias(cmdname,alias)},
 'delete-alias': (cmdname,alias)=>{return deleteAlias(cmdname,alias)},
 'edit':(filename,y,readline,fn)=>{return edit(filename,readline,fn)},
+'alias':(cmdname)=>{return alias(cmdname)},
 'list':()=>{return list()},
 
 };
@@ -84,7 +85,8 @@ color.toLBlue('overwrite:')+ 'Overwrites an existing note\n'+ color.toLBlue('Syn
 color.toLBlue('read:')+ 'Reads a note\n'+ color.toLBlue('Syntax:')+' read filename\n',
 color.toLBlue('rename:')+ 'Renames an existing file to newone\n'+ color.toLBlue('Syntax:')+' rename filename newfilename\n',
 color.toLBlue('create-alias:')+ 'Creates an alias to a command\n'+ color.toLBlue('Syntax:')+' create-alias basecommandname alias\n',
-color.toLBlue('delete-alias:')+ 'Deletes an alias to a command\n'+ color.toLBlue('Syntax:')+' delete-alias basecommandname alias\n'
+color.toLBlue('delete-alias:')+ 'Deletes an alias to a command\n'+ color.toLBlue('Syntax:')+' delete-alias basecommandname alias\n',
+color.toLBlue('ls:')+ 'Lists all notes\n'+ color.toLBlue('Syntax:')+'ls\n'
 ];
 
 
@@ -141,9 +143,9 @@ function checkcmd(y) {
           console.log(color.toYellow(e));
         });
       }
-      if (text.trim() == "alias" || text.trim() == "aliases") {
-        console.log(aliases);
-      }
+      // if (text.trim() == "alias" || text.trim() == "aliases") {
+      //   console.log(aliases);
+      // }
 
       setTimeout(() => {
         checkcmd();
